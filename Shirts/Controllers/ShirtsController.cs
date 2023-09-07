@@ -4,7 +4,7 @@ namespace Shirts.Controllers
 {
    
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class ShirtsController : ControllerBase
     {
         
@@ -15,7 +15,7 @@ namespace Shirts.Controllers
         }
         
         [HttpGet("{id}")]
-        public string GetShirt(int id)
+        public string GetShirts(int id)
         {
             return $"Get a shirt from the e-shop with id: {id}";
         }
