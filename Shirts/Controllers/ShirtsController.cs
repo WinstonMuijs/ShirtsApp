@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Shirts.Models;
 
 namespace Shirts.Controllers
 {
    
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ShirtsController : ControllerBase
     {
         
@@ -21,7 +22,7 @@ namespace Shirts.Controllers
         }
         
         [HttpPost]
-        public string PostShirts()
+        public string CreateShirts([FromBody] Shirt shirt)
         {
             return "Post a shirt from the e-shop";
         }
