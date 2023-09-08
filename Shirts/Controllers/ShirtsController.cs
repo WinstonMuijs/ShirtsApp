@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Shirts.Filters;
 using Shirts.Models;
 using Shirts.Models.Repositories;
 
@@ -16,18 +17,11 @@ namespace Shirts.Controllers
         }
         
         [HttpGet("{id}")]
+        [Shirt_ValidateShirtIdFilter] // Filter invoked before action.
         public IActionResult GetShirts(int id)
         {
-            if(id < 0)
-            {
-                return BadRequest();
-            }
-            var shirt = ShirtRepository.GetShirtById(id);
-            if(shirt == null)
-            {
-                return NotFound();
-            }
-            return Ok(shirt);
+            
+            return Ok(ShirtRepository.GetShirtById(id));
         }
         
         [HttpPost]
