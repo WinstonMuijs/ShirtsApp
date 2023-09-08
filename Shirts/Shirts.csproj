@@ -12,11 +12,13 @@
     <None Remove="Controllers\" />
     <None Remove="scheme\" />
     <None Remove="Models\" />
+    <None Remove="Models\Validations\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="scheme\" />
     <Folder Include="Models\" />
+    <Folder Include="Models\Validations\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.9" />
