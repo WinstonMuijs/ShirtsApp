@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Shirts.Models;
+using Shirts.Models.Repositories;
 
 namespace Shirts.Controllers
 {
@@ -8,15 +9,6 @@ namespace Shirts.Controllers
     [Route("api/[controller]")]
     public class ShirtsController : ControllerBase
     {
-        private List<Shirt> shirts = new List<Shirt>()
-        {
-            new Shirt{ShirtId = 1 , Brand = "Levy" , Color = "Blue" , Gender = "Men" , Price = 99.95 , Size = 9},
-            new Shirt{ShirtId = 2, Brand = "Gucci", Color = "Black", Gender = "Women", Price = 299.50 , Size = 6 },
-            new Shirt{ShirtId = 3, Brand = "Nike", Color = "Orange", Gender ="Men" , Price = 59.98, Size = 8 }
-        };
-
-               
-        
         [HttpGet]
         public IActionResult GetShirts()
         {
@@ -30,7 +22,7 @@ namespace Shirts.Controllers
             {
                 return BadRequest();
             }
-            var shirt =  shirts.FirstOrDefault(x => x.ShirtId == id);
+            var shirt = ShirtRepository.GetShirtById(id);
             if(shirt == null)
             {
                 return NotFound();
