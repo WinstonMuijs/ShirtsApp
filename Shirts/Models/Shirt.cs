@@ -14,7 +14,7 @@ namespace Shirts.Models
         [Required]
         public string? Gender { get; set; }
         [Shirt_CorrectSizing]
-        public int Size { get; set; }
+        public int? Size { get; set; }
 
         public double Price { get; set; }
     }
