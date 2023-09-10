@@ -7,13 +7,13 @@ namespace Shirts.Models
 	{
 		public int ShirtId { get; set; }
 
-        [Required]
+        [Required] //AnnotationValidation by .NET
         public string? Brand { get; set; }
-        [Required]
+        [Required] //AnnotationValidation
         public string? Color { get; set; }
-        [Required]
+        [Required] // Annotation
         public string? Gender { get; set; }
-        [Shirt_CorrectSizing]
+        [Shirt_CorrectSizing] //Validation written in Validations folder
         public int? Size { get; set; }
 
         public double Price { get; set; }

@@ -1,8 +1,8 @@
 ﻿using System;
 namespace Shirts.Models.Repositories
 {
-	public static class ShirtRepository
-	{
+    public static class ShirtRepository
+    {
         private static readonly List<Shirt> shirts = new List<Shirt>()
         {
             new Shirt{ShirtId = 1 , Brand = "Levy" , Color = "Blue" , Gender = "Men" , Price = 99.95 , Size = 9},
@@ -20,7 +20,7 @@ namespace Shirts.Models.Repositories
             return shirts.Any(x => x.ShirtId == id);
         }
 
-        public static Shirt? GetShirtByProperties(string? brand, string?gender, string? color, int? size)
+        public static Shirt? GetShirtByProperties(string? brand, string? gender, string? color, int? size)
         {
             return shirts.FirstOrDefault(x =>
             !string.IsNullOrWhiteSpace(brand) &&
@@ -47,6 +47,24 @@ namespace Shirts.Models.Repositories
             shirt.ShirtId = maxId + 1;
 
             shirts.Add(shirt);
+        }
+
+        public static void UpdateShirt(Shirt shirt)
+        {
+            var shirtToUPdate = shirts.First(x => x.ShirtId == shirt.ShirtId);
+            shirtToUPdate.Brand = shirt.Brand;
+            shirtToUPdate.Color = shirt.Color;
+            shirtToUPdate.Gender = shirt.Gender;
+            shirtToUPdate.Price = shirt.Price;
+            shirtToUPdate.Size = shirt.Size;
+        }
+        public static void DeleteShirt(int shirtId)
+        {
+            var shirt = GetShirtById(shirtId);
+            if(shirt != null)
+            {
+                shirts.Remove(shirt);
+            }
         }
     }
 }

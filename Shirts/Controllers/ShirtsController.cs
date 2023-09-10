@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Shirts.Filters;
+using Shirts.Filters.ActionFilters;
+using Shirts.Filters.ExceptionFilters;
 using Shirts.Models;
 using Shirts.Models.Repositories;
 
@@ -17,7 +18,8 @@ namespace Shirts.Controllers
         }
         
         [HttpGet("{id}")]
-        [Shirt_ValidateShirtIdFilter] // Filter invoked before action.
+        // ActionFilter invoked before action for validation id.
+        [Shirt_ValidateShirtIdFilter] 
         public IActionResult GetShirtById(int id)
         {
             
@@ -25,6 +27,7 @@ namespace Shirts.Controllers
         }
 
         [HttpPost]
+        // ActionFilter invoked before action for validation shirt.
         [Shirt_ValidateCreateShirtFilter]
         public IActionResult CreateShirts([FromBody] Shirt shirt)
         {
@@ -40,15 +43,28 @@ namespace Shirts.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateShirts(int id)
+        // ActionFilter validation id
+        [Shirt_ValidateShirtIdFilter]
+        // ActionFilter for validation ShirtId with id
+        [Shirt_ValedateUpdateShirtFilter]
+        // ExceptionFilter
+        [Shirt_HandleUpdateExceptionsFilter]
+        public IActionResult UpdateShirts(int id, Shirt shirt)
         {
-            return Ok($"Update a shirt from the e-shop with id: {id}");
+            
+            ShirtRepository.UpdateShirt(shirt);
+            
+
+            return NoContent(); 
         }
 
         [HttpDelete("{id}")]
+        [Shirt_ValidateShirtIdFilter]
         public IActionResult DeleteShirts(int id)
         {
-            return Ok($"Delete ashirts from the e-shop with id: {id}");
+            var shirt = ShirtRepository.GetShirtById(id);
+            ShirtRepository.DeleteShirt(id);
+            return Ok(shirt);
         }
     }
 }
