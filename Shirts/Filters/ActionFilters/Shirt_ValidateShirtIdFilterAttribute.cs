@@ -41,7 +41,7 @@ namespace Shirts.Filters.ActionFilters
                         context.ModelState.AddModelError("ShirtId", "Shirt doesn't exist.");
                         var problem_state = new ValidationProblemDetails(context.ModelState)
                         {
-                            Status = StatusCodes.Status400BadRequest
+                            Status = StatusCodes.Status404NotFound
                         };
                         context.Result = new NotFoundObjectResult(problem_state);
                     }

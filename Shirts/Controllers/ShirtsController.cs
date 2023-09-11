@@ -38,15 +38,15 @@ namespace Shirts.Controllers
 
         [HttpPost]
         // ActionFilter invoked before action for validation shirt.
-        [Shirt_ValidateCreateShirtFilter]
+        [TypeFilter(typeof(Shirt_ValidateCreateShirtFilterAttribute))]
         public IActionResult CreateShirts([FromBody] Shirt shirt)
         {
             //if (shirt == null) { return BadRequest(); }
             //var existingShirt = ShirtRepository.GetShirtByProperties(shirt.Brand, shirt.Gender, shirt.Color, shirt.Size);
             //if (existingShirt != null) { return BadRequest(); };
 
-            ShirtRepository.CreateShirts(shirt);
-
+            this.db.Shirts.Add(shirt);
+            this.db.SaveChanges();
 
             return CreatedAtAction(nameof(GetShirtById),
                 new { id = shirt.ShirtId }, shirt);
@@ -59,12 +59,18 @@ namespace Shirts.Controllers
         // ActionFilter for validation ShirtId with id
         [Shirt_ValedateUpdateShirtFilter]
         // ExceptionFilter
-        [Shirt_HandleUpdateExceptionsFilter]
+        [TypeFilter(typeof(Shirt_HandleUpdateExceptionsFilterAttribute))]
         public IActionResult UpdateShirts(int id, Shirt shirt)
         {
-            
-            ShirtRepository.UpdateShirt(shirt);
-            
+
+            var updateShirt = HttpContext.Items["shirt"] as Shirt;
+            updateShirt.Brand = shirt.Brand;
+            updateShirt.Color = shirt.Color;
+            updateShirt.Gender = shirt.Gender;
+            updateShirt.Price = shirt.Price;
+            updateShirt.Size = shirt.Size;
+
+            db.SaveChanges();
 
             return NoContent(); 
         }
