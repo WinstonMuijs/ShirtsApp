@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Shirts.Data;
 using Shirts.Filters.ActionFilters;
 using Shirts.Filters.ExceptionFilters;
 using Shirts.Models;
@@ -11,19 +12,28 @@ namespace Shirts.Controllers
     [Route("api/[controller]")]
     public class ShirtsController : ControllerBase
     {
+        private readonly ApplicationDbContext db;
+        // DI of the DbContext
+        public ShirtsController(ApplicationDbContext db)
+        {
+            this.db = db;
+        }
+
+
         [HttpGet]
         public IActionResult GetShirts()
         {
-            return Ok(ShirtRepository.GetShirts());
+            return Ok(db.Shirts.ToList());
         }
         
         [HttpGet("{id}")]
         // ActionFilter invoked before action for validation id.
-        [Shirt_ValidateShirtIdFilter] 
+        // Now with DI of DbContext
+        [TypeFilter(typeof(Shirt_ValidateShirtIdFilterAttribute))] 
         public IActionResult GetShirtById(int id)
         {
             
-            return Ok(ShirtRepository.GetShirtById(id));
+            return Ok(HttpContext.Items["shirt"]);
         }
 
         [HttpPost]
@@ -44,7 +54,8 @@ namespace Shirts.Controllers
 
         [HttpPut("{id}")]
         // ActionFilter validation id
-        [Shirt_ValidateShirtIdFilter]
+        //// Now with DI of DbContext
+        [TypeFilter(typeof(Shirt_ValidateShirtIdFilterAttribute))]
         // ActionFilter for validation ShirtId with id
         [Shirt_ValedateUpdateShirtFilter]
         // ExceptionFilter
@@ -59,12 +70,14 @@ namespace Shirts.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Shirt_ValidateShirtIdFilter]
+        //// Now with DI of DbContext
+        [TypeFilter(typeof(Shirt_ValidateShirtIdFilterAttribute))]
         public IActionResult DeleteShirts(int id)
         {
-            var shirt = ShirtRepository.GetShirtById(id);
-            ShirtRepository.DeleteShirt(id);
-            return Ok(shirt);
+            var DeleteShirt = HttpContext.Items["shirt"] as Shirt;
+            db.Shirts.Remove(DeleteShirt);
+            db.SaveChanges();
+            return Ok(DeleteShirt);
         }
     }
 }
